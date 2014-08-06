@@ -1,7 +1,6 @@
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.utils import simplejson as json
 from django.views.decorators.http import require_POST
 
 from django.contrib.auth.decorators import login_required
@@ -78,4 +77,5 @@ def rate(request, content_type_id, object_id):
         overall.update()
         data["overall_rating"] = str(overall.rating)
 
-    return HttpResponse(json.dumps(data), mimetype="application/json")
+    return JsonResponse(data)
+
