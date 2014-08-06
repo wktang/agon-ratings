@@ -1,7 +1,6 @@
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.utils import simplejson as json
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 
 from django.contrib.auth.decorators import login_required
@@ -87,6 +86,6 @@ def rate(request, content_type_id, object_id):
 
     # TODO Actually work with the Accept header,
     if request.is_ajax():
-        return HttpResponse(json.dumps(data), mimetype="application/json")
+        return JsonResponse(data)
     else:
         return HttpResponseRedirect(request.META.get('Referer') or (obj.get_absolute_url and obj.get_absolute_url()) or '/')
