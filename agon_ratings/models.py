@@ -10,7 +10,6 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-from agon_ratings.categories import RATING_CATEGORY_CHOICES
 from agon_ratings.managers import OverallRatingManager
 
 USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', User)
@@ -23,7 +22,7 @@ class OverallRating(models.Model):
     content_object = GenericForeignKey()
     rating = models.DecimalField(decimal_places=1, max_digits=6, null=True)
 
-    category = models.IntegerField(null=True, choices=RATING_CATEGORY_CHOICES)
+    category = models.CharField(null=True, max_length=50)
 
     objects = OverallRatingManager()
 
@@ -41,7 +40,8 @@ class OverallRating(models.Model):
 
 
 class Rating(models.Model):
-    overall_rating = models.ForeignKey(OverallRating, null=True, related_name="ratings")
+    overall_rating = models.ForeignKey(
+        OverallRating, null=True, related_name="ratings")
     object_id = models.IntegerField(db_index=True)
     content_type = models.ForeignKey(ContentType)
     content_object = GenericForeignKey()
@@ -49,7 +49,7 @@ class Rating(models.Model):
     rating = models.IntegerField()
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
-    category = models.IntegerField(null=True, choices=RATING_CATEGORY_CHOICES)
+    category = models.CharField(null=True, max_length=50)
 
     class Meta:
         unique_together = [
