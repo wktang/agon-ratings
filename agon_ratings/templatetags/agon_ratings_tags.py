@@ -245,3 +245,18 @@ def user_rating_css():
 @register.simple_tag
 def user_rating_url(user, obj):
     return rating_post_url(user, obj)
+
+
+@register.assignment_tag
+def percent_rating(rating):
+    return float(rating) * 100.0 / NUM_OF_RATINGS
+
+
+@register.assignment_tag
+def overall_rating_count(obj):
+    ct = ContentType.objects.get_for_model(obj)
+    ratings = Rating.objects.filter(
+        object_id=obj.pk,
+        content_type=ct,
+    )
+    return ratings.count()
